@@ -1,0 +1,7 @@
+# Fichiers à exclure de l'image Docker
+.git
+.gitignore
+.dockerignore
+README.md
+*.md
+docker-compose.yml

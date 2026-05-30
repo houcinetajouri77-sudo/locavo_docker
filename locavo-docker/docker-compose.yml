@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+
+  # ── Service Web (PHP + Apache) ──────────────────────────────────────
+  web:
+    build: .
+    container_name: locavo_web
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_NAME=locavo_db
+      - DB_USER=locavo_user
+      - DB_PASS=locavo_pass
+    networks:
+      - locavo_network
+    restart: unless-stopped
+
+  # ── Service Base de Données (MySQL) ─────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: locavo_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: locavo_db
+      MYSQL_USER: locavo_user
+      MYSQL_PASSWORD: locavo_pass
+    volumes:
+      - locavo_db_data:/var/lib/mysql
+      - ./sql/create.sql:/docker-entrypoint-initdb.d/01_create.sql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/02_init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - locavo_network
+    restart: unless-stopped
+
+  # ── phpMyAdmin (optionnel, pour gérer la BDD visuellement) ──────────
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: locavo_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: locavo_user
+      PMA_PASSWORD: locavo_pass
+    depends_on:
+      - db
+    networks:
+      - locavo_network
+    restart: unless-stopped
+
+# ── Volumes persistants ───────────────────────────────────────────────
+volumes:
+  locavo_db_data:
+
+# ── Réseau interne ────────────────────────────────────────────────────
+networks:
+  locavo_network:
+    driver: bridge

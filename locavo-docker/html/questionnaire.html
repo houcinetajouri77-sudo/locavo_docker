@@ -1,0 +1,118 @@
+<!--
+   Projet Locavo – Technologies Web – ENSI 2025/2026
+   Membres : Yosri Nawach – Houcine Tajouri – Seif Eddine Salah
+   Fichier : questionnaire.html
+-->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <title>Locavo - Questionnaire</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/banner.js" defer></script>
+    <script src="../js/questionnaire.js" defer></script>
+</head>
+
+<body>
+    <div class="banniere-container">
+        <div class="banniere-texte" id="banniere-texte"><img src="../images/logo.png" alt="Locavo" class="banniere-logo"><span
+                id="banniere-msg"></span></div>
+    </div>
+    <nav class="navbar">
+        <div class="logo-container"><img src="../images/logo.png" alt="Locavo Logo" class="logo-img"><span class="logo-text">Locavo</span></div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../php/flotte.php">Nos Voitures</a></li>
+            <li><a href="../php/recherche.php">Recherche</a></li>
+            <li><a href="../php/reservation.php">Réservation</a></li>
+            <li><a href="../php/sport.php">Sport / Coupés</a></li>
+            <li><a href="../php/suv.php">SUV &amp; Crossovers</a></li>
+            <li><a href="../php/economiques.php">Économiques</a></li>
+            <li><a href="../php/modeles.php">Cabriolets</a></li>
+            <li><a href="../php/luxe.php">Luxe</a></li>
+            <li><a href="../html/contact.html">Contact</a></li>
+            <li><a href="../php/about.php">À propos</a></li>
+            <li><a href="../html/funpage.html">Fun Page</a></li>
+        </ul>
+    </nav>
+    <header class="about-hero"
+        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-home.jpg'); background-size: cover; background-position: center;">
+        <h1>Questionnaire de satisfaction</h1>
+        <p>Aidez-nous à améliorer nos services</p>
+    </header>
+
+    <div class="form-container">
+        <h2>Donnez-nous votre avis</h2>
+        <p>Tous les champs marqués d'un * sont obligatoires.</p>
+        <form id="form-questionnaire" action="../php/questionnaire.php" method="POST">
+            <fieldset>
+                <legend>Vos informations</legend>
+                <div class="form-grid">
+                    <div class="form-group"><label for="q-nom">Nom complet *</label><input type="text" id="q-nom" name="nom"
+                            placeholder="Ex : Ali Ben Ali"><small class="err" id="err-nom"></small></div>
+                    <div class="form-group"><label for="q-email">Email *</label><input type="email" id="q-email" name="email"
+                            placeholder="Ex : ali@mail.com"><small class="err" id="err-email"></small></div>
+                    <div class="form-group"><label for="q-age">Âge *</label><input type="number" id="q-age" name="age" min="18"
+                            max="99" placeholder="Ex : 25"><small class="err" id="err-age"></small></div>
+                    <div class="form-group"><label for="q-ville">Ville</label><select id="q-ville" name="ville">
+                            <option value="">-- Choisir --</option>
+                            <option value="tunis">Tunis</option>
+                            <option value="sousse">Sousse</option>
+                            <option value="sfax">Sfax</option>
+                            <option value="bizerte">Bizerte</option>
+                            <option value="autre">Autre</option>
+                        </select></div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Votre expérience Locavo</legend>
+                <div class="form-group"><label>Satisfaction globale *</label>
+                    <div class="radio-group"><label><input type="radio" name="satisfaction" value="excellent">
+                            Excellent</label><label><input type="radio" name="satisfaction" value="bien">
+                            Bien</label><label><input type="radio" name="satisfaction" value="moyen">
+                            Moyen</label><label><input type="radio" name="satisfaction" value="mauvais"> Mauvais</label>
+                    </div><small class="err" id="err-satisfaction"></small>
+                </div>
+                <div class="form-group"><label>Qu'avez-vous apprécié ?</label>
+                    <div class="checkbox-group"><label><input type="checkbox" name="points" value="prix"> Prix
+                            compétitifs</label><label><input type="checkbox" name="points" value="vehicules"> Qualité
+                            des véhicules</label><label><input type="checkbox" name="points" value="accueil"> Accueil
+                            chaleureux</label><label><input type="checkbox" name="points" value="rapidite"> Rapidité du
+                            service</label><label><input type="checkbox" name="points" value="site"> Site web
+                            intuitif</label></div>
+                </div>
+                <div class="form-group"><label for="q-note">Note sur 10</label>
+                    <div style="display:flex;align-items:center;gap:10px;"><span>1</span><input type="range" id="q-note" name="note"
+                            min="1" max="10" value="7" style="flex:1;"><span>10</span></div>
+                    <p style="text-align:center;">Votre note : <strong id="note-display">7</strong> / 10</p>
+                </div>
+                <div class="form-group"><label for="q-commentaire">Commentaire *</label><textarea id="q-commentaire" name="commentaire"
+                        placeholder="Décrivez votre expérience avec Locavo..."></textarea><small class="err"
+                        id="err-commentaire"></small></div>
+            </fieldset>
+            <button type="submit" class="btn-orange">Envoyer mon avis</button>
+            <button type="reset" class="btn-reset">Réinitialiser</button>
+        </form>
+        <div id="resultat-questionnaire" style="margin-top:20px;text-align:center;"></div>
+    </div>
+
+    <section class="cta-section">
+        <h2>Merci pour votre temps !</h2>
+        <p>Votre avis nous aide à nous améliorer chaque jour.</p><a href="../index.html" class="btn-white">Retour à
+            l'accueil</a>
+    </section>
+    <footer>
+        <p>© 2026 Locavo - Tous droits réservés</p>
+        <p>Contact : <a href="tel:+21612345678">+216 12 345 678</a> | <a
+                href="mailto:contact@locavo.tn">contact@locavo.tn</a></p>
+        <div class="footer-links"><a href="../index.html">Accueil</a><a href="../php/about.php">À propos</a><a
+                href="../html/contact.html">Contact</a><a href="../html/questionnaire.html">Questionnaire</a><a href="../html/funpage.html">Fun
+                Page</a></div>
+    </footer>
+</body>
+
+</html>

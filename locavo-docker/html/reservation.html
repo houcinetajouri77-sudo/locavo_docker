@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <title>Locavo - Réservation Rapide</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/banner.js" defer></script>
+    <script src="../js/reservation.js" defer></script>
+</head>
+
+<body>
+    <div class="banniere-container">
+        <div class="banniere-texte" id="banniere-texte"><img src="../images/logo.png" alt="Locavo" class="banniere-logo"><span
+                id="banniere-msg"></span></div>
+    </div>
+    <nav class="navbar">
+        <div class="logo-container"><img src="../images/logo.png" alt="Locavo Logo" class="logo-img"><span class="logo-text">Locavo</span></div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../php/flotte.php">Nos Voitures</a></li>
+            <li><a href="../php/recherche.php">Recherche</a></li>
+            <li><a href="../php/reservation.php" class="active">Réservation</a></li>
+            <li><a href="../php/sport.php">Sport / Coupés</a></li>
+            <li><a href="../php/suv.php">SUV &amp; Crossovers</a></li>
+            <li><a href="../php/economiques.php">Économiques</a></li>
+            <li><a href="../php/modeles.php">Cabriolets</a></li>
+            <li><a href="../php/luxe.php">Luxe</a></li>
+            <li><a href="../html/contact.html">Contact</a></li>
+            <li><a href="../php/about.php">À propos</a></li>
+            <li><a href="../html/funpage.html">Fun Page</a></li>
+        </ul>
+    </nav>
+    <header class="res-hero"
+        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-home.jpg'); background-size: cover; background-position: center;">
+        <h2>Réservation Rapide</h2>
+        <p>Remplissez le formulaire, nous vous recontactons en moins d'une heure.</p>
+    </header>
+    <div class="form-container">
+        <h2>Formulaire de Réservation</h2>
+        
+<form action="../php/reservation.php" method="POST" onsubmit="return validerReservation()">
+            <fieldset>
+                <legend>Informations Personnelles</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nom">Nom complet *</label>
+                        <input type="text" id="nom" name="nom" placeholder="Ex: Foulen Ben Foulen"
+                               required minlength="2">
+                        <span id="err_nom" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="Ex: mail@email.com"
+                               required>
+                        <span id="err_email" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">Téléphone *</label>
+                        <input type="tel" id="telephone" name="telephone" placeholder="Ex: 12345678"
+                               required pattern="[0-9]{8}" maxlength="8" title="8 chiffres exactement">
+                        <span id="err_telephone" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Âge *</label>
+                        <input type="number" id="age" name="age" min="18" max="99" placeholder="25"
+                               required>
+                        <span id="err_age" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="adresse">Adresse</label>
+                        <input type="text" id="adresse" name="adresse" placeholder="Votre adresse complète">
+                        <span id="err_adresse" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="permis">Numéro de permis</label>
+                        <input type="text" id="permis" name="permis" placeholder="Ex: 12345678">
+                        <span id="err_permis" class="error-msg"></span>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Détails de la Location</legend>
+
+                <!-- Auto-fill depuis une page catégorie (GET params: marque, modele, prix, categorie) -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="date_depart">Date de départ *</label>
+                        <input type="date" id="date_depart" name="date_depart" required>
+                        <span id="err_date_depart" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_retour">Date de retour *</label>
+                        <input type="date" id="date_retour" name="date_retour" required>
+                        <span id="err_date_retour" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="heure_depart">Heure de départ</label>
+                        <input type="time" id="heure_depart" name="heure_depart">
+                        <span id="err_heure_depart" class="error-msg"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="heure_retour">Heure de retour</label>
+                        <input type="time" id="heure_retour" name="heure_retour">
+                        <span id="err_heure_retour" class="error-msg"></span>
+                    </div>
+                </div>
+                <!-- Auto-fill depuis une page catégorie (GET params: marque, modele, prix, categorie) -->
+                <div class="form-group">
+                    <label for="categorie">Catégorie de véhicule *</label>
+                    <select id="categorie" name="categorie" required onchange="filtrerModeles()">
+                        <option value="">-- Sélectionnez une catégorie --</option>
+                        <option value="economique">Économique</option>
+                        <option value="suv">SUV & Crossover</option>
+                        <option value="cabriolet">Cabriolet</option>
+                        <option value="sport">Sport / Coupé</option>
+                    </select>
+                    <span id="err_categorie" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label for="modele">Modèle souhaité</label>
+                    <select id="modele" name="modele">
+                        <option value="">-- Choisissez d'abord une catégorie --</option>
+                        <optgroup label="Économiques" data-cat="economique">
+                            <option value="Renault Clio">Renault Clio</option>
+                            <option value="Peugeot 208">Peugeot 208</option>
+                            <option value="Toyota Yaris">Toyota Yaris</option>
+                            <option value="Fiat 500">Fiat 500</option>
+                            <option value="Volkswagen Polo">Volkswagen Polo</option>
+                            <option value="Renault Zoe">Renault Zoé</option>
+                        </optgroup>
+                        <optgroup label="SUV & Crossovers" data-cat="suv">
+                            <option value="Toyota RAV4">Toyota RAV4</option>
+                            <option value="Hyundai Tucson">Hyundai Tucson</option>
+                            <option value="Kia Sportage">Kia Sportage</option>
+                            <option value="Ford Kuga">Ford Kuga</option>
+                            <option value="Nissan Qashqai">Nissan Qashqai</option>
+                            <option value="Dacia Jogger">Dacia Jogger</option>
+                        </optgroup>
+                        <optgroup label="Cabriolets" data-cat="cabriolet">
+                            <option value="BMW Serie 4">BMW Série 4</option>
+                            <option value="Mercedes Classe C">Mercedes Classe C</option>
+                            <option value="Audi A5 Cabrio">Audi A5 Cabrio</option>
+                            <option value="Peugeot 308 CC">Peugeot 308 CC</option>
+                            <option value="Volkswagen Eos">Volkswagen Eos</option>
+                            <option value="Renault Megane CC">Renault Mégane CC</option>
+                        </optgroup>
+                        <optgroup label="Sport / Coupés" data-cat="sport">
+                            <option value="BMW M4">BMW M4</option>
+                            <option value="Audi TT">Audi TT</option>
+                            <option value="Porsche Cayman">Porsche Cayman</option>
+                            <option value="Mercedes AMG A45">Mercedes AMG A45</option>
+                            <option value="Ford Mustang">Ford Mustang</option>
+                            <option value="Toyota GR86">Toyota GR86</option>
+                        </optgroup>
+                    </select>
+                    <span id="err_modele" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label for="lieu_prise">Lieu de prise en charge</label>
+                    <input type="text" id="lieu_prise" name="lieu_prise" placeholder="Ex: Aéroport Tunis-Carthage" list="lieux">
+                    <datalist id="lieux">
+                        <option value="Aéroport Tunis-Carthage">
+                        <option value="Aéroport Enfidha-Hammamet">
+                        </datalist>
+                    <span id="err_lieu_prise" class="error-msg"></span>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Options Supplémentaires</legend>
+                <div class="form-group">
+                    <label>Options souhaitées :</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="options" value="gps"> GPS intégré</label>
+                        <label><input type="checkbox" name="options" value="siege_bebe"> Siège bébé</label>
+                        </div>
+                    <span id="err_options" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label>Type de transmission préféré :</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="transmission" value="automatique" checked> Automatique</label>
+                        <label><input type="radio" name="transmission" value="manuelle"> Manuelle</label>
+                    </div>
+                    <span id="err_transmission" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label for="budget">Budget maximum par jour (<span id="budget_val">300</span> DT) :</label>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-weight: bold; color: #0e6fa5;">50 DT</span>
+                        <input type="range" id="budget" name="budget" min="50" max="1500" value="300" style="flex: 1; cursor: pointer;"
+                               oninput="document.getElementById('budget_val').innerText = this.value">
+                        <span style="font-weight: bold; color: #0e6fa5;">1500 DT</span>
+                    </div>
+                    <span id="err_budget" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label for="km_estime">Kilométrage estimé</label>
+                    <input type="number" id="km_estime" name="km_estime" min="0" placeholder="Ex: 500" step="50">
+                    <span id="err_km_estime" class="error-msg"></span>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Informations Complémentaires</legend>
+                <div class="form-group">
+                    <label for="commentaire">Commentaires ou demandes spéciales</label>
+                    <textarea id="commentaire" name="commentaire" placeholder="Indiquez vos besoins particuliers..."></textarea>
+                    <span id="err_commentaire" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label for="fichier">Joindre un document (permis, pièce d'identité)</label>
+                    <input type="file" id="fichier" name="fichier" accept=".pdf,.jpg,.jpeg,.png">
+                    <span id="err_fichier" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="conditions" value="accepte" required> J'accepte les conditions générales *</label>
+                    <span id="err_conditions" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="rgpd" value="accepte" required> J'accepte la politique de confidentialité *</label>
+                    <span id="err_rgpd" class="error-msg"></span>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn-orange">Vérifier la disponibilité</button>
+            <button type="reset" class="btn-reset">Réinitialiser le formulaire</button>
+        </form>
+    </div>
+    <footer>
+        <p>© 2026 Locavo - Tous droits réservés</p>
+        <p>Contact : <a href="tel:+21612345678">+216 12 345 678</a> | <a
+                href="mailto:contact@locavo.tn">contact@locavo.tn</a></p>
+        <div class="footer-links"><a href="../index.html">Accueil</a><a href="../php/about.php">À propos</a><a
+                href="../html/contact.html">Contact</a><a href="../html/questionnaire.html">Questionnaire</a><a href="../html/funpage.html">Fun
+                Page</a></div>
+    </footer>
+    <script src="../js/script.js"></script>
+    <script>
+    function filtrerModeles(preselectVal) {
+        const cat    = document.getElementById('categorie').value;
+        const selMod = document.getElementById('modele');
+        const groups = selMod.querySelectorAll('optgroup');
+
+        selMod.innerHTML = '<option value="">-- Sélectionnez un modèle --</option>';
+
+        if (!cat) return;
+
+        groups.forEach(function(grp) {
+            if (grp.getAttribute('data-cat') === cat) {
+                selMod.appendChild(grp.cloneNode(true));
+            }
+        });
+
+        if (preselectVal) {
+            for (let opt of selMod.options) {
+                if (opt.value.toLowerCase() === preselectVal.toLowerCase() ||
+                    opt.text.toLowerCase().includes(preselectVal.toLowerCase())) {
+                    opt.selected = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    const _allGroups = Array.from(document.getElementById('modele').querySelectorAll('optgroup'))
+        .map(g => g.cloneNode(true));
+
+    function filtrerModeles(preselectVal) {
+        const cat    = document.getElementById('categorie').value;
+        const selMod = document.getElementById('modele');
+
+        selMod.innerHTML = '<option value="">-- Sélectionnez un modèle --</option>';
+        if (!cat) return;
+
+        _allGroups.forEach(function(grp) {
+            if (grp.getAttribute('data-cat') === cat) {
+                selMod.appendChild(grp.cloneNode(true));
+            }
+        });
+
+        if (preselectVal) {
+            for (let opt of selMod.options) {
+                if (opt.value.toLowerCase().includes(preselectVal.toLowerCase()) ||
+                    opt.text.toLowerCase().includes(preselectVal.toLowerCase())) {
+                    opt.selected = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    (function() {
+        const params    = new URLSearchParams(window.location.search);
+        const marque    = params.get('marque')    || '';
+        const modele    = params.get('modele')    || '';
+        const categorie = params.get('categorie') || '';
+
+        if (categorie) {
+            const selCat = document.getElementById('categorie');
+            for (let opt of selCat.options) {
+                if (opt.value === categorie) { opt.selected = true; break; }
+            }
+            filtrerModeles(marque + ' ' + modele);
+        }
+    })();
+    </script>
+</body>
+
+</html>
