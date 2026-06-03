@@ -13,7 +13,6 @@ jobs:
       - name: Recuperer le code source
         uses: actions/checkout@v3
 
-      # Modification ici : on cherche les fichiers PHP dans le sous-dossier locavo-docker
       - name: Verifier la syntaxe PHP (Linting)
         run: |
           echo "Vérification des fichiers PHP..."
@@ -28,7 +27,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Modification ici : le contexte devient le sous-dossier locavo-docker
       - name: Build et Push de l'image Docker
         uses: docker/build-push-action@v4
         with:
