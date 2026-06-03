@@ -1,0 +1,44 @@
+name: CI/CD Pipeline Locavo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+   
+      - name: Récupérer le code source
+        uses: actions/checkout@v3
+
+
+      - name: Vérifier la syntaxe PHP (Linting)
+        run: |
+          echo "Démarrage de la vérification de la syntaxe PHP..."
+          for file in $(find . -name "*.php"); do
+            php -l $file
+            if [ $? -ne 0 ]; then
+              echo "Erreur de syntaxe trouvée dans $file"
+              exit 1
+            fi
+          done
+          echo "Le code PHP est valide."
+
+
+      - name: Connexion à Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build et Push de l'image Docker Locavo
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+ 
+          tags: ${{ secrets.DOCKER_USERNAME }}/locavo-app:latest
