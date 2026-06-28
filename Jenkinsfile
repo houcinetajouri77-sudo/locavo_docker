@@ -9,8 +9,7 @@ pipeline {
         }
         stage('Build Docker') {
             steps {
-                echo 'Construction de l'image Docker de Locavo...'
-                // Plus tard, on mettra : sh 'docker build -t locavo-app .'
+               echo 'Construction de l\'image Docker de Locavo...'
             }
         }
         stage('Deploy') {
