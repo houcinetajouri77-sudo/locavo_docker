@@ -17,7 +17,8 @@ pipeline {
             steps {
                 echo "Déploiement de l'application avec Docker Compose..."
                 // On va dans le dossier et on recrée le conteneur en arrière-plan (-d)
-                sh "cd locavo-docker && docker compose up -d --force-recreate"
+                sh "cd locavo-docker && docker-compose up -d --force-recreate"
+            }
             }
         }
     }
