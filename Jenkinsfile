@@ -10,7 +10,8 @@ pipeline {
         stage('Build Docker') {
             steps {
                 echo "Construction de l'image Docker de Locavo..."
-                sh "docker build -t locavo-app:latest ."
+                // On spécifie le chemin du Dockerfile (-f) et le dossier racine du build (locavo-docker/)
+                sh "docker build -t locavo-app:latest -f locavo-docker/Dockerfile locavo-docker/"
             }
         }
         stage('Deploy') {
